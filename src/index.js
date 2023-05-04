@@ -1,8 +1,12 @@
+import './sass/style.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import axios from 'axios';
 import {PixabayApi} from './pixabay-api';
+import SimpleLightbox from 'simplelightbox';
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const pixabayApi = new PixabayApi();
+const lightbox = new SimpleLightbox('.gallery a');
+console.log(lightbox);
 
 const searchFormEl = document.querySelector('#search-form');
 // const searchFormBtn = document.querySelector('[submit]');
@@ -12,12 +16,14 @@ const galleryList = document.querySelector('.gallery');
 const onSearchFormSubmit = e => {
 e.preventDefault();
 pixabayApi.page = 1;
-pixabayApi.searchQuaryEl = e.currentTarget.searchQuery.value;
+pixabayApi.searchQuaryEl = e.currentTarget.searchQuery.value.trim();
 pixabayApi
 .fetchPhotosByQuary()
 .then(data => {
-//   galleryList.innerHTML = markup;
 galleryList.innerHTML = createGalleryMarkup(data);
+lightbox.refresh();
+console.log(data.total);
+Notify.success("Hooray! We found ${} images.");
 if(pixabayApi.perPage < data.total) {
   loadMoreBtn.classList.remove('is-hidden');
   loadMoreBtn.addEventListener('click', onMoreBtnClick);
@@ -33,12 +39,11 @@ if(pixabayApi.perPage < data.total) {
 
 const onMoreBtnClick = e => {
     pixabayApi.page += 1; 
-    // pixabayApi.perPage += 40;
     pixabayApi
 .fetchPhotosByQuary()
 .then(data => {
-//   galleryList.innerHTML = markup;
 galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup(data));
+lightbox.refresh();
 
 console.log(pixabayApi.perPage, data.hits.length);
 if(pixabayApi.page === Math.ceil(data.total / pixabayApi.perPage)) {
@@ -46,17 +51,11 @@ if(pixabayApi.page === Math.ceil(data.total / pixabayApi.perPage)) {
     loadMoreBtn.removeEventListener('click', onMoreBtnClick);
     Notify.info("We're sorry, but you've reached the end of search results.")
 }
-// }  else if (data.hits.length < pixabayApi.perPage) {
-//   console.log(data.hits.length < pixabayApi.perPage);
-//   Notify.info("We're sorry, but you've reached the end of search results.")
-// }
 }) 
 .catch(err => {
-    // Notify.failure('Sorry, there are no images matching your search query. Please try again.');
     console.log(err);
 });
-};
-    
+};   
 
 function createGalleryMarkup(images) {
     const markup = images.hits

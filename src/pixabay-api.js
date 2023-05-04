@@ -1,11 +1,13 @@
 'use-strict';
+import axios from 'axios';
+
 export class PixabayApi {
     #BASE_URL = 'https://pixabay.com/api';
     #API_KEY = '36006142-181823dd87fc38ea464bb0f7d';
     constructor() {
         this.page = null;
         this.searchQuaryEl = '';
-        this.perPage = 20;
+        this.perPage = 40;
     }
 
     fetchPhotosByQuary() {
