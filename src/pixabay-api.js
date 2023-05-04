@@ -10,7 +10,7 @@ export class PixabayApi {
         this.perPage = 40;
     }
 
-    fetchPhotosByQuary() {
+    async fetchPhotosByQuary() {
         const searchParams = {
             q: this.searchQuaryEl,
             page: this.page,
@@ -20,8 +20,9 @@ export class PixabayApi {
             safesearch:true,
             key: this.#API_KEY,
         };
-        
-        return axios.get(`${this.#BASE_URL}`, {params: searchParams})
+
+        const response = await axios.get(`${this.#BASE_URL}`, {params: searchParams});
+        return response;
         // return fetch(`${this.#BASE_URL}/?${searchParams}`).then(response => {
         //     if(!response.ok) {
         //         throw new Error(response.status)

@@ -89,6 +89,8 @@
     .load-more {
       display: block;
       margin: 0 auto;
+      position: relative;
+      top: 50px;
     }
     
     .load-more.is-hidden {
