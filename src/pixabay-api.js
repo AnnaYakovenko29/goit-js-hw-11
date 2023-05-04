@@ -5,7 +5,7 @@ export class PixabayApi {
     constructor() {
         this.page = null;
         this.searchQuaryEl = '';
-        this.perPage = 10;
+        this.perPage = 20;
     }
 
     fetchPhotosByQuary() {

@@ -17,12 +17,15 @@ pixabayApi
 .fetchPhotosByQuary()
 .then(data => {
 //   galleryList.innerHTML = markup;
-galleryList(createGalleryMarkup(data));
-loadMoreBtn.classList.remove('.is-hidden');
-loadMoreBtn.addEventListener('click', onMoreBtnClick);
+galleryList.innerHTML = createGalleryMarkup(data);
+if(pixabayApi.perPage < data.total) {
+  loadMoreBtn.classList.remove('is-hidden');
+  loadMoreBtn.addEventListener('click', onMoreBtnClick);
+} else if (data.total === 0) {
+  Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+}
 })
 .catch(err => {
-    // Notify.failure('Sorry, there are no images matching your search query. Please try again.');
     console.log(err);
 });
 
@@ -30,16 +33,24 @@ loadMoreBtn.addEventListener('click', onMoreBtnClick);
 
 const onMoreBtnClick = e => {
     pixabayApi.page += 1; 
+    // pixabayApi.perPage += 40;
     pixabayApi
 .fetchPhotosByQuary()
 .then(data => {
 //   galleryList.innerHTML = markup;
 galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup(data));
+
+console.log(pixabayApi.perPage, data.hits.length);
 if(pixabayApi.page === Math.ceil(data.total / pixabayApi.perPage)) {
-    loadMoreBtn.classList.add('.is-hidden');
+    loadMoreBtn.classList.add('is-hidden');
     loadMoreBtn.removeEventListener('click', onMoreBtnClick);
+    Notify.info("We're sorry, but you've reached the end of search results.")
 }
-})
+// }  else if (data.hits.length < pixabayApi.perPage) {
+//   console.log(data.hits.length < pixabayApi.perPage);
+//   Notify.info("We're sorry, but you've reached the end of search results.")
+// }
+}) 
 .catch(err => {
     // Notify.failure('Sorry, there are no images matching your search query. Please try again.');
     console.log(err);
@@ -84,7 +95,8 @@ function createGalleryMarkup(images) {
       `)
   })
   .join(''); 
-  galleryList.insertAdjacentHTML('beforeend', markup); 
+  return markup;
+  // galleryList.insertAdjacentHTML('beforeend', markup); 
 }
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
