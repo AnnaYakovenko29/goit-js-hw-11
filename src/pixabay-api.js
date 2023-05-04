@@ -11,7 +11,7 @@ export class PixabayApi {
     }
 
     fetchPhotosByQuary() {
-        const searchParams = new URLSearchParams({
+        const searchParams = {
             q: this.searchQuaryEl,
             page: this.page,
             per_page: this.perPage,
@@ -19,12 +19,14 @@ export class PixabayApi {
             orientation: 'horizontal',
             safesearch:true,
             key: this.#API_KEY,
-        })
-        return fetch(`${this.#BASE_URL}/?${searchParams}`).then(response => {
-            if(!response.ok) {
-                throw new Error(response.status)
-            }
-            return response.json()
-        });
+        };
+        
+        return axios.get(`${this.#BASE_URL}`, {params: searchParams})
+        // return fetch(`${this.#BASE_URL}/?${searchParams}`).then(response => {
+        //     if(!response.ok) {
+        //         throw new Error(response.status)
+        //     }
+        //     return response.json()
+        // });
     }
 }

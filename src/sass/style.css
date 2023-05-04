@@ -5,8 +5,9 @@
     
     img {
       display: block;
-      max-width: 100%;
-      height: auto;
+      /* max-width: 100%;
+      height: auto; */
+      justify-content: center;
     }
     
     h1,
@@ -35,23 +36,33 @@
       text-decoration: none;
     }
     
-    /* .container {
+    .container {
       width: 1200px;
       padding-left: 15px;
       padding-right: 15px;
       margin-left: auto;
       margin-right: auto;
-    } */
+    }
     
     .gallery-section {
       padding: 60px 0;
     }
     
+    .header {
+      position: fixed;  
+      width: 100%;
+      top: 0;  
+      z-index: 100; 
+      background-color: #e9fae7;
+
+    }
+
     .search-form {
       display: flex;
       width: 600px;
       margin: 0 auto;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
+      padding-top: 30px;
     }
     
     .search-input {
@@ -97,6 +108,7 @@
         grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
         grid-auto-rows: 240px;
         justify-content: center;
+        margin-top: 30px;
         margin-left: auto;
         margin-right: auto;
         display: grid;
@@ -104,11 +116,10 @@
 
     .info {
         display: flex;
-        /* justify-content: center; */
+        justify-content: center;
         align-items: center;
-      
         font-size: 12px;
-        text-align: center;
+        /* text-align: center; */
     }
     
     .photo-card {
@@ -117,7 +128,7 @@
     }
     
     .info-item {
-      flex-basis: calc((100% - 120px) / 4);
+      /* flex-basis: calc((100% - 120px) / 4); */
       margin-left: 20px;
       margin-top: 20px;
       

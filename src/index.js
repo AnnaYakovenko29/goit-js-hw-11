@@ -19,11 +19,12 @@ pixabayApi.page = 1;
 pixabayApi.searchQuaryEl = e.currentTarget.searchQuery.value.trim();
 pixabayApi
 .fetchPhotosByQuary()
-.then(data => {
+.then(responce => {
+const {data} = responce;
+console.log(data);
 galleryList.innerHTML = createGalleryMarkup(data);
 lightbox.refresh();
-console.log(data.total);
-Notify.success("Hooray! We found ${} images.");
+Notify.success(`Hooray! We found ${data.total} images.`);
 if(pixabayApi.perPage < data.total) {
   loadMoreBtn.classList.remove('is-hidden');
   loadMoreBtn.addEventListener('click', onMoreBtnClick);
@@ -41,7 +42,8 @@ const onMoreBtnClick = e => {
     pixabayApi.page += 1; 
     pixabayApi
 .fetchPhotosByQuary()
-.then(data => {
+.then(responce => {
+const {data} = responce;
 galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup(data));
 lightbox.refresh();
 
