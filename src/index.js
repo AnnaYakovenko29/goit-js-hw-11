@@ -9,7 +9,6 @@ const lightbox = new SimpleLightbox('.gallery a');
 console.log(lightbox);
 
 const searchFormEl = document.querySelector('#search-form');
-// const searchFormBtn = document.querySelector('[submit]');
 const loadMoreBtn = document.querySelector('.load-more');
 const galleryList = document.querySelector('.gallery');
 
@@ -24,41 +23,22 @@ try {
   galleryList.innerHTML = createGalleryMarkup(data);
   lightbox.refresh();
 
-if(pixabayApi.perPage < data.total) {
+if(pixabayApi.perPage < data.totalHits) {
   loadMoreBtn.classList.remove('is-hidden');
   loadMoreBtn.addEventListener('click', onMoreBtnClick);
-} else if (data.total === 0) {
+} else if(data.totalHits < pixabayApi.perPage) {
+  loadMoreBtn.classList.add('is-hidden');
+}
+if (data.totalHits === 0) {
   galleryList.innerHTML = '';
   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-} else if(data.total > 0) {
-  Notify.success(`Hooray! We found ${data.total} images.`);
+} else  {
+  Notify.success(`Hooray! We found ${data.totalHits} images.`);
 }
 } catch (error) {
   console.log(error.message);
 }
 };
-
-// .then(responce => {
-// const {data} = responce;
-// console.log(data);
-// galleryList.innerHTML = createGalleryMarkup(data);
-// lightbox.refresh();
-
-// if(pixabayApi.perPage < data.total) {
-//   loadMoreBtn.classList.remove('is-hidden');
-//   loadMoreBtn.addEventListener('click', onMoreBtnClick);
-// } else if (data.total === 0) {
-//   galleryList.innerHTML = '';
-//   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-// } else if(data.total > 0) {
-//   Notify.success(`Hooray! We found ${data.total} images.`);
-// }
-// })
-// .catch(err => {
-//     console.log(err);
-// });
-
-
 
 const onMoreBtnClick = async e => {
     pixabayApi.page += 1; 
@@ -69,7 +49,7 @@ try {
   lightbox.refresh();
   
   console.log(pixabayApi.perPage, data.hits.length);
-  if(pixabayApi.page === Math.ceil(data.total / pixabayApi.perPage)) {
+  if(pixabayApi.page === Math.ceil(data.totalHits / pixabayApi.perPage)) {
       loadMoreBtn.classList.add('is-hidden');
       loadMoreBtn.removeEventListener('click', onMoreBtnClick);
       Notify.info("We're sorry, but you've reached the end of search results.")
@@ -78,22 +58,6 @@ try {
   console.log(error.message);
 }
 }; 
-// .then(responce => {
-// const {data} = responce;
-// galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup(data));
-// lightbox.refresh();
-
-// console.log(pixabayApi.perPage, data.hits.length);
-// if(pixabayApi.page === Math.ceil(data.total / pixabayApi.perPage)) {
-//     loadMoreBtn.classList.add('is-hidden');
-//     loadMoreBtn.removeEventListener('click', onMoreBtnClick);
-//     Notify.info("We're sorry, but you've reached the end of search results.")
-// }
-// }) 
-// .catch(err => {
-//     console.log(err);
-// });
-  
 
 function createGalleryMarkup(images) {
     const markup = images.hits
@@ -137,3 +101,39 @@ function createGalleryMarkup(images) {
 }
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
+
+// .then(responce => {
+// const {data} = responce;
+// console.log(data);
+// galleryList.innerHTML = createGalleryMarkup(data);
+// lightbox.refresh();
+
+// if(pixabayApi.perPage < data.total) {
+//   loadMoreBtn.classList.remove('is-hidden');
+//   loadMoreBtn.addEventListener('click', onMoreBtnClick);
+// } else if (data.total === 0) {
+//   galleryList.innerHTML = '';
+//   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+// } else if(data.total > 0) {
+//   Notify.success(`Hooray! We found ${data.total} images.`);
+// }
+// })
+// .catch(err => {
+//     console.log(err);
+// });
+// .then(responce => {
+// const {data} = responce;
+// galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup(data));
+// lightbox.refresh();
+
+// console.log(pixabayApi.perPage, data.hits.length);
+// if(pixabayApi.page === Math.ceil(data.total / pixabayApi.perPage)) {
+//     loadMoreBtn.classList.add('is-hidden');
+//     loadMoreBtn.removeEventListener('click', onMoreBtnClick);
+//     Notify.info("We're sorry, but you've reached the end of search results.")
+// }
+// }) 
+// .catch(err => {
+//     console.log(err);
+// });
+  
